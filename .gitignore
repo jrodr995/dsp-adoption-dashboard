@@ -1,0 +1,14 @@
+# OS
+.DS_Store
+
+# Python
+__pycache__/
+*.pyc
+
+# Tableau
+*.twb
+*.twbx
+
+# Data
+/data/*.parquet
+/data/*.db
