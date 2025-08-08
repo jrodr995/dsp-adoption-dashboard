@@ -1,8 +1,12 @@
-# DSP Adoption Dashboard (Synthetic)
+# DSP Adoption Dashboard — Portfolio (Synthetic Data)
 
 [![Made with Tableau](https://img.shields.io/badge/Made%20with-Tableau-1f74bf)](https://www.tableau.com/)
+![Python 3](https://img.shields.io/badge/Python-3.x-3776AB?logo=python&logoColor=white)
+![SQL](https://img.shields.io/badge/SQL-Snowflake-blue)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Data: Synthetic](https://img.shields.io/badge/Data-Synthetic-blue)](#)
+![Last commit](https://img.shields.io/github/last-commit/jrodr995/dsp-adoption-dashboard)
+![Stars](https://img.shields.io/github/stars/jrodr995/dsp-adoption-dashboard?style=social)
 
 This repo shows how I built a DSP (Digital Sales Presentation) adoption dashboard. It tracks usage by Region → Division → Community, handles mixed grains (daily activity + weekly inventory), and keeps counts honest by only including days when a community is active.
 
