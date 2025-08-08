@@ -1,0 +1,11 @@
+flowchart LR
+  A[Daily Events\nanalytics.mp_traffic] -->|aggregate to daily| B[events_aggregated]
+  S[Active Status\nanalytics.sitecore_community_attributes] -->|ACT only| C[sitecore_active]
+  W[Community Wide\nanalytics.community_wide] --> D[active_communities]
+  D --> E[community_active_dates]
+  C --> E
+  B --> F[(Dashboard Dataset)]
+  E --> F
+  P[Weekly Inventory & Pace\nanalytics.smartpace_piv] -->|latest week| H[homesite_summary]
+  H --> F
+  F --> G[Tableau Dashboard]

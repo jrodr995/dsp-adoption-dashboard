@@ -17,6 +17,7 @@ A sanitized, portfolio-ready analytics project modeling adoption of a Digital Sa
 - [Run locally](#run-locally)
 - [Why this is interesting](#why-this-is-interesting)
 - [Project structure](#project-structure)
+- [PRD and Architecture](#prd-and-architecture)
 - [License](#license)
 
 ## Features
@@ -69,6 +70,10 @@ Open the Tableau workbook (if added later) under `tableau/`, or review screensho
 - `docs/` calculation notes and demo script
 - `screenshots/` images for the README
 - `tableau/` optional workbook wired to the synthetic data
+
+## PRD and Architecture
+- PRD: `docs/prd.md`
+- Architecture (Mermaid): `docs/architecture.mmd`
 
 ## License
 MIT
