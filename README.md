@@ -11,6 +11,7 @@ A sanitized, portfolio-ready analytics project modeling adoption of a Digital Sa
 ## Table of contents
 - [Features](#features)
 - [Screenshots](#screenshots)
+- [Screenshots and Attribution](#screenshots-and-attribution)
 - [Data model](#data-model)
 - [Key calculations](#key-calculations)
 - [Run locally](#run-locally)
@@ -34,7 +35,10 @@ Optional extras:
 - ![Appointments Leaderboard](screenshots/appointments_leaderboard.png)
 - ![DSP Sales Detail](screenshots/dsp_sales_detail.png)
 
-If any real screenshot is included, ensure numbers are not sensitive (or blur/crop) and add the note: “Underlying data in this repo are synthetic.”
+## Screenshots and Attribution
+- No confidential data is included in this repository; all data have been switched to fully synthetic representations.
+- Screenshots are illustrative only and may include brand marks; they are provided for portfolio demonstration of work experience.
+- Trademarks and logos are property of their respective owners.
 
 ## Data model
 - Daily event grain for page views; weekly snapshot for inventory/pace
