@@ -1,31 +1,70 @@
 # DSP Adoption Dashboard (Synthetic)
 
-This repository showcases a sanitized version of a Tableau analytics project that measures adoption of a Digital Sales Presentation (DSP) using page view activity. Data here are fully synthetic and table names are generic.
+[![Made with Tableau](https://img.shields.io/badge/Made%20with-Tableau-1f74bf)](https://www.tableau.com/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
+[![Data: Synthetic](https://img.shields.io/badge/Data-Synthetic-blue)](#)
 
-## What this shows
-- Hierarchical adoption tracking (Region → Division → Community)
-- Key metrics: Active Communities, Communities with DSP Page Views, % Adoption, Total DSP Page Views, Black+Red Inventory, Pace Status
-- Relative-date responsive usage buckets (0–7, 8–30, 31–90, 90+ days, Never)
-- SQL approach that replaces a static date spine with an "active days only" backbone
+A sanitized, portfolio-ready analytics project modeling adoption of a Digital Sales Presentation (DSP) across Regions → Divisions → Communities. It demonstrates hierarchy-aware KPIs, relative-date responsive usage buckets, and a clean SQL backbone that counts only days when communities are active.
 
-## Repo structure
-- `data/`: synthetic CSVs
-- `scripts/`: generator scripts for data
-- `sql/`: generic SQL illustrating the model
-- `tableau/`: workbook wired to synthetic data (or screenshots if you don’t use Tableau Desktop)
-- `docs/`: diagrams and detailed calc notes
-- `screenshots/`: images used in README (safe to include sanitized real screenshot if allowed)
+---
 
-## Quick start
-1) Generate synthetic data
+## Table of contents
+- [Features](#features)
+- [Screenshots](#screenshots)
+- [Data model](#data-model)
+- [Key calculations](#key-calculations)
+- [Run locally](#run-locally)
+- [Why this is interesting](#why-this-is-interesting)
+- [Project structure](#project-structure)
+- [License](#license)
+
+## Features
+- Hierarchical dashboard: Region → Division → Community
+- Core KPIs: Active Communities, Communities with DSP PVs, % Adoption, Total PVs, Ready Inventory (Black+Red), Pace Status
+- Relative-date responsive usage buckets: 0–7, 8–30, 31–90, 90+ days, Never
+- Fast, accurate SQL: replaces a static date spine with an “active-days only” backbone
+- Synthetic dataset and redacted SQL so you can reproduce locally
+
+## Screenshots
+Add your images to `screenshots/` and they’ll render here:
+
+![DSP Adoption Report](screenshots/dashboard.png)
+
+Optional extras:
+- ![Appointments Leaderboard](screenshots/appointments_leaderboard.png)
+- ![DSP Sales Detail](screenshots/dsp_sales_detail.png)
+
+If any real screenshot is included, ensure numbers are not sensitive (or blur/crop) and add the note: “Underlying data in this repo are synthetic.”
+
+## Data model
+- Daily event grain for page views; weekly snapshot for inventory/pace
+- “Active-days” backbone: only count dates where a community is active
+- See `sql/adoption_core_redacted.sql` for the redacted, production-aligned query
+
+## Key calculations
+See `docs/calculations.md` for the exact expressions, including:
+- Adoption (% communities with PVs)
+- Filter-responsive “Last Usage” buckets using `MAX([Event Date])` from the filtered range
+- Ready Inventory using community-level `MAX()` snapshots
+
+## Run locally
 ```bash
 python3 scripts/generate_synthetic_data.py
 ```
-2) Open `tableau/DSP_Adoption_Sample.twbx` (or use the screenshots if you don’t have Desktop)
+Open the Tableau workbook (if added later) under `tableau/`, or review screenshots above.
 
-## Notes
-- All data are synthetic; schema/table names are redacted/generic.
-- The SQL and calculations reflect real patterns: active-days backbone, weekly inventory snapshot joining, and filter-responsive bucket logic.
+## Why this is interesting
+- Demonstrates practical Tableau LOD patterns and date-filter-aware logic
+- Shows how to join mixed-grain sources (daily events + weekly snapshots) cleanly
+- Communicates a stakeholder-ready narrative for product adoption
+
+## Project structure
+- `data/` synthetic CSVs
+- `scripts/` data generator
+- `sql/` redacted SQL (`adoption_core_redacted.sql`)
+- `docs/` calculation notes and demo script
+- `screenshots/` images for the README
+- `tableau/` optional workbook wired to the synthetic data
 
 ## License
 MIT
