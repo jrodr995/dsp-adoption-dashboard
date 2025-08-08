@@ -1,98 +1,86 @@
-# DSP Adoption Dashboard — Product Requirements Document (Portfolio-Safe)
+# DSP Adoption Dashboard — Product Requirements (Portfolio-Safe)
 
-Note: This PRD describes the sanitized project. All data and schema names in this repository are synthetic/redacted.
+All data and names in this repo are synthetic/redacted.
 
 ## 1. Background
-The Digital Sales Presentation (DSP) is a tool used by sales associates during community tours to showcase homesites. Product owners requested an adoption dashboard to understand which Regions, Divisions, and Communities are using the tool, identify gaps, and prioritize outreach.
+The Digital Sales Presentation (DSP) helps associates showcase homesites during community tours. The product team needed a clear read on adoption across Regions → Divisions → Communities.
 
-## 2. Problem Statement
-Stakeholders lack a reliable view of DSP adoption that:
-- Accurately reflects the number of active communities by day
-- Aggregates to Region/Division with drill-down
-- Responds correctly to date filters (e.g., last 30 days)
-- Surfaces low-usage communities, especially those with inventory or behind pace
+## 2. Problem
+Leaders lacked a trustworthy view of adoption that:
+- Uses the right denominator (communities active on a given day)
+- Rolls up cleanly to Region/Division
+- Responds to relative date filters
+- Highlights low‑usage communities with inventory or behind pace
 
-## 3. Objectives and Success Metrics
-- Provide a single dashboard for: adoption KPIs, trendlines, and last-usage distribution
-- Adoption accuracy: counts only days where communities are active
-- Performance: load under ~30 seconds for a 1-year window (dependent on warehouse)
-- Usability: drill down from Region → Division → Community and filter by date, pace, and name
+## 3. Goals and Metrics
+- One dashboard covering: adoption KPIs, trendlines, last‑usage distribution
+- Accurate counts using active‑days only
+- Load time within ~30s for a 1‑year window (warehouse‑dependent)
+- Smooth drill‑down and filtering
 
-## 4. Users and Use Cases
-- DSP Product Owners: national view, identify lagging areas for enablement
-- Regional/Division Leaders: track their areas; target communities with high inventory but low usage
+## 4. Users
+- DSP product owners: national view, target areas for enablement
+- Regional/Division leaders: track local adoption and prioritize outreach
 
-## 5. In Scope
-- Table view with hierarchy (Region/Division/Community) and KPIs:
-  - Active Communities
-  - Communities with DSP Page Views
-  - Communities with no DSP Page Views
-  - % Communities with DSP PVs (Adoption)
-  - Total DSP PVs and % of Total PVs
-  - Black + Red Inventory (weekly snapshot)
+## 5. Scope
+- Hierarchical table with KPIs: Active Communities, Communities with DSP PVs, Communities with no DSP PVs, Adoption %, Total PVs, Black+Red Inventory, Pace Status
 - Trendline: % Communities with DSP PVs by Region (relative date)
-- Last DSP Usage distribution: mutually exclusive buckets (0–7, 8–30, 31–90, 90+ days, Never)
+- Last usage buckets: 0–7, 8–30, 31–90, 90+ days, Never (mutually exclusive)
 - Filters: Relative Date, Region, Division, Community Name, Pace Status
 
-## 6. Out of Scope (Initial Version)
-- Individual associate performance, appointments, recaps integration
-- Complex forecasting; deep seasonality modeling
+## 6. Out of scope (v1)
+- Associate‑level performance, appointments/recaps integration
+- Forecasting and seasonality analysis
 
-## 7. Data Sources (Redacted)
+## 7. Data (redacted sources)
 - Daily page view events: `analytics.mp_traffic`
 - Community reference: `analytics.community_wide`
-- Daily active status (Sitecore-style): `analytics.sitecore_community_attributes`
-- Weekly inventory & pace: `analytics.smartpace_piv`
+- Daily active status: `analytics.sitecore_community_attributes`
+- Weekly inventory/pace: `analytics.smartpace_piv`
 
-## 8. Data Model and Grain
-- Backbone: one row per community per active day (status = ACT), last 365 days
-- Events aggregated to daily counts per community
-- Inventory/pace as a weekly snapshot (use most recent week for “current” context)
+## 8. Model and grain
+- Backbone: one row per community per active day (last 365 days)
+- Events aggregated to daily grain
+- Inventory/pace via most‑recent weekly snapshot
 
-## 9. Calculations (Tableau specs)
+## 9. Key calculations (Tableau)
 - Communities with DSP PVs:
   - COUNTD(IF { INCLUDE [Community Code], [Event Date] : SUM([Navigation Viewed Page Count]) } > 0 THEN [Community Code] END)
 - Adoption %:
   - Communities with DSP PVs / Active Communities
-- Last Usage (filter-responsive):
+- Last usage (filter‑responsive):
   - Last Usage Date in Period = { FIXED [Community Code] : MAX(IF [Navigation Viewed Page Count] > 0 AND [Event Date] <= MAX([Event Date]) THEN [Event Date] END) }
-  - Bucket: 0–7, 8–30, 31–90, 90+ days, Never (mutually exclusive via DATEDIFF to MAX([Event Date]))
-- Ready Inventory (current):
-  - MAX(Black Homesites) + MAX(Red Homesites) at community level
+  - Bucket via DATEDIFF to `MAX([Event Date])`
+- Ready inventory (current):
+  - MAX(Black) + MAX(Red) at community level
 
-## 10. SQL Approach
-- Replace static date spine with active-days backbone using `sitecore_active` (ACT rows only)
-- Pre-aggregate events to daily grain; join to active-days
-- Join latest weekly inventory/pace snapshot
-- Redacted query: `sql/adoption_core_redacted.sql`
+## 10. SQL
+- Replace date spine with active‑days backbone (`sitecore_active`)
+- Pre‑aggregate events; join to active‑days
+- Join latest weekly inventory/pace
+- See `sql/adoption_core_redacted.sql`
 
-## 11. Performance & Quality
-- Early filtering (last 365 days) in CTEs
-- Pre-aggregation in warehouse
-- Validation checks:
-  - Active community counts change with date filters
-  - Sum of community PVs matches totals at higher levels when properly scoped
-  - Inventory values reflect weekly snapshot (no multi-day double counting)
+## 11. Perf & quality
+- Early date filters
+- Pre‑aggregation in warehouse
+- Sanity checks: adoption ≤ 100%, totals reconcile, inventory not double‑counted
 
-## 12. UX Specification
-- Dashboard layout:
-  - Top: hierarchical table (Region/Division/Community)
-  - Middle: adoption trendline by Region
-  - Right: last usage distribution bars
-  - Bottom: community list with PVs and inventory annotation
-- Consistent color palette (greens good, reds attention)
+## 12. UX
+- Top: hierarchy table
+- Middle: region trendline
+- Right: last‑usage bars
+- Bottom: community list with PVs and inventory
 
-## 13. Risks & Mitigations
-- Risk: LOD calculations ignore filters → Use `INCLUDE` or scoped `FIXED` with `MAX([Event Date])`
-- Risk: Weekly inventory double counting → use MAX at community level
-- Risk: Data joins on community code consistency → standardize with `LPAD`
+## 13. Risks & mitigations
+- LODs ignoring filters → use `INCLUDE` or scoped `FIXED`
+- Weekly inventory double counting → community‑level MAX
+- Join mismatches → standardize codes with `LPAD`
 
 ## 14. Deliverables
-- Tableau workbook wired to warehouse (production) and to synthetic data (portfolio)
-- Redacted SQL, documentation, and screenshots
-- README linking to PRD and calculations
+- Tableau workbook (prod and synthetic variants)
+- Redacted SQL, docs, and screenshots
 
-## 15. Future Work
-- Integrate appointments/recaps for a fuller adoption picture
-- Add ML propensity scoring for outreach prioritization (time-split validation)
-- Automate KPI exports for weekly email digests
+## 15. Future work
+- Add appointments/recaps
+- Simple propensity model for outreach prioritization
+- Automated weekly KPI export

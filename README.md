@@ -4,7 +4,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Data: Synthetic](https://img.shields.io/badge/Data-Synthetic-blue)](#)
 
-A sanitized, portfolio-ready analytics project modeling adoption of a Digital Sales Presentation (DSP) across Regions → Divisions → Communities. It demonstrates hierarchy-aware KPIs, relative-date responsive usage buckets, and a clean SQL backbone that counts only days when communities are active.
+This repo shows how I built a DSP (Digital Sales Presentation) adoption dashboard. It tracks usage by Region → Division → Community, handles mixed grains (daily activity + weekly inventory), and keeps counts honest by only including days when a community is active.
 
 ---
 
@@ -22,60 +22,57 @@ A sanitized, portfolio-ready analytics project modeling adoption of a Digital Sa
 - [License](#license)
 
 ## Features
-- Hierarchical dashboard: Region → Division → Community
-- Core KPIs: Active Communities, Communities with DSP PVs, % Adoption, Total PVs, Ready Inventory (Black+Red), Pace Status
-- Relative-date responsive usage buckets: 0–7, 8–30, 31–90, 90+ days, Never
-- Fast, accurate SQL: replaces a static date spine with an “active-days only” backbone
-- Synthetic dataset and redacted SQL so you can reproduce locally
+- Region → Division → Community hierarchy with drill-down
+- KPIs: Active Communities, Communities with DSP PVs, Adoption %, Total PVs, Black+Red Inventory, Pace Status
+- Last‑usage buckets (0–7, 8–30, 31–90, 90+ days, Never) that respect the date filter
+- SQL model that replaces a static date spine with an active‑days backbone
+- Synthetic dataset and redacted SQL for safe sharing
 
 ## Screenshots
-Add your images to `screenshots/` and they’ll render here:
-
 ![DSP Adoption Report](screenshots/dsp_adoption_dashboard.png)
 
-Optional extras:
+Optional:
 - ![Appointments Leaderboard](screenshots/appointments_leaderboard.png)
 - ![DSP Sales Detail](screenshots/dsp_sales_detail.png)
 
 ## Screenshots and Attribution
-- No confidential data is included in this repository; all data have been switched to fully synthetic representations.
-- Screenshots are illustrative only and may include brand marks; they are provided for portfolio demonstration of work experience.
-- Trademarks and logos are property of their respective owners.
+- No confidential data is in this repo; all data are synthetic.
+- Screenshots are illustrative and used to show my work experience. Logos belong to their owners.
 
 ## Data model
-- Daily event grain for page views; weekly snapshot for inventory/pace
-- “Active-days” backbone: only count dates where a community is active
-- See `sql/adoption_core_redacted.sql` for the redacted, production-aligned query
+- Daily page views at community level; weekly inventory/pace snapshot
+- Only count days where a community is active (avoids under‑stating adoption)
+- See `sql/adoption_core_redacted.sql` for the core query
 
 ## Key calculations
-See `docs/calculations.md` for the exact expressions, including:
-- Adoption (% communities with PVs)
-- Filter-responsive “Last Usage” buckets using `MAX([Event Date])` from the filtered range
-- Ready Inventory using community-level `MAX()` snapshots
+See `docs/calculations.md` for exact formulas, including:
+- Adoption = Communities with page views / Active communities
+- Filter‑responsive last‑usage buckets using `MAX([Event Date])` from the selected range
+- Ready inventory from weekly snapshot (max per community)
 
 ## Run locally
 ```bash
 python3 scripts/generate_synthetic_data.py
 ```
-Open the Tableau workbook (if added later) under `tableau/`, or review screenshots above.
+Open a workbook wired to the CSVs under `data/` (or use the screenshots).
 
 ## Why this is interesting
-- Demonstrates practical Tableau LOD patterns and date-filter-aware logic
-- Shows how to join mixed-grain sources (daily events + weekly snapshots) cleanly
-- Communicates a stakeholder-ready narrative for product adoption
+- Practical LOD patterns that play nicely with relative date filters
+- Clean approach to joining mixed-grain sources without double counting
+- Readable SQL + Tableau logic that’s easy to validate
 
 ## Impact
-- Enables product owners to pinpoint Regions/Divisions/Communities with low DSP usage, especially when inventory is high or pace is behind.
-- Establishes accurate denominators by counting only active community-days, improving trust in adoption KPIs.
-- Standardizes drill-down reporting and reduces duplicate worksheets by consolidating hierarchy views and filter actions.
+- Helps product owners spot regions/divisions/communities with low DSP usage, especially where inventory is high or pace is behind.
+- Uses true denominators (active days only), which improved trust in metrics.
+- Consolidates drill‑down reporting into one dashboard instead of multiple sheets.
 
 ## Project structure
 - `data/` synthetic CSVs
-- `scripts/` data generator
+- `scripts/` generator for reproducible data
 - `sql/` redacted SQL (`adoption_core_redacted.sql`)
-- `docs/` calculation notes and demo script
-- `screenshots/` images for the README
-- `tableau/` optional workbook wired to the synthetic data
+- `docs/` PRD, calculation notes, and a short demo flow
+- `screenshots/` images used in this README
+- `tableau/` optional workbook wired to the CSVs
 
 ## PRD and Architecture
 - PRD: `docs/prd.md`
