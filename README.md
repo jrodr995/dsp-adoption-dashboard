@@ -16,6 +16,7 @@ A sanitized, portfolio-ready analytics project modeling adoption of a Digital Sa
 - [Key calculations](#key-calculations)
 - [Run locally](#run-locally)
 - [Why this is interesting](#why-this-is-interesting)
+- [Impact](#impact)
 - [Project structure](#project-structure)
 - [PRD and Architecture](#prd-and-architecture)
 - [License](#license)
@@ -62,6 +63,11 @@ Open the Tableau workbook (if added later) under `tableau/`, or review screensho
 - Demonstrates practical Tableau LOD patterns and date-filter-aware logic
 - Shows how to join mixed-grain sources (daily events + weekly snapshots) cleanly
 - Communicates a stakeholder-ready narrative for product adoption
+
+## Impact
+- Enables product owners to pinpoint Regions/Divisions/Communities with low DSP usage, especially when inventory is high or pace is behind.
+- Establishes accurate denominators by counting only active community-days, improving trust in adoption KPIs.
+- Standardizes drill-down reporting and reduces duplicate worksheets by consolidating hierarchy views and filter actions.
 
 ## Project structure
 - `data/` synthetic CSVs
