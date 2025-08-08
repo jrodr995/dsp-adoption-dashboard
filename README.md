@@ -28,7 +28,7 @@ A sanitized, portfolio-ready analytics project modeling adoption of a Digital Sa
 ## Screenshots
 Add your images to `screenshots/` and they’ll render here:
 
-![DSP Adoption Report](screenshots/dashboard.png)
+![DSP Adoption Report](screenshots/dsp_adoption_dashboard.png)
 
 Optional extras:
 - ![Appointments Leaderboard](screenshots/appointments_leaderboard.png)
