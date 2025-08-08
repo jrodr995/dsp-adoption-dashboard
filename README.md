@@ -33,6 +33,8 @@ This repo shows how I built a DSP (Digital Sales Presentation) adoption dashboar
 - Synthetic dataset and redacted SQL for safe sharing
 
 ## Screenshots
+![Demo](screenshots/demo.gif)
+
 ![DSP Adoption Report](screenshots/dsp_adoption_dashboard.png)
 
 Optional:
